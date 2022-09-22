@@ -1,0 +1,18 @@
+!contents -R2
+!*> '''Variables Defined'''
+!define TEST_SYSTEM {slim}
+*!
+
+!*> '''Classpath'''
+${maven.classpath}
+*!
+
+
+|import             |
+|se.uhr.nya.fitnesse|
+
+
+
+|script|bet sim fixture|
+|show  |connect        |
+|show  |reset          |

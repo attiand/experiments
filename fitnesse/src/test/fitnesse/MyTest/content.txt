@@ -1,0 +1,27 @@
+!contents -R2
+
+!define REMOTE_DEBUG_COMMAND {java -agentlib:jdwp=transport=dt_socket,address=*:8787,server=y,suspend=y -cp %p %m}
+
+
+!*> '''Variables Defined'''
+!define TEST_SYSTEM {slim}
+*!
+
+!*> '''Classpath'''
+${maven.classpath}
+*!
+
+
+|import             |
+|se.uhr.nya.fitnesse|
+
+|script|bet sim fixture|localhost        |61480                                                                             |
+|show  |connect                                                                                                             |
+|show  |för anrop till |/endpoint?param=1|svara med body  |<?xml version="1.0" encoding="utf-8"?><PaymentInfo></PaymentInfo>|
+|show  |för anrop till |/endpoint?param=3|svara med status|404                                                              |
+|show  |close                                                                                                               |
+
+
+
+
+

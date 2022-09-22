@@ -1,0 +1,16 @@
+.project
+.classpath
+.settings/
+/target/
+*.log
+
+release.properties
+
+# database
+/feed
+/rsv
+
+# IntelliJ
+*.iml
+.idea/
+
