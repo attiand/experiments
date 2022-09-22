@@ -1,0 +1,17 @@
+plugins {
+	id 'groovy'
+	id 'eclipse'
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+repositories { 
+	jcenter()
+}
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.4.10','com.lesfurets:jenkins-pipeline-unit:1.1'
+	testCompile 'junit:junit:4.12','org.assertj:assertj-core:3.12.2'
+}

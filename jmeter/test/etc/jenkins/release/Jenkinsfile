@@ -1,0 +1,62 @@
+#!groovy
+
+@Library('nya')
+
+import se.uhr.nya.build.Git
+import se.uhr.nya.build.Nodes
+
+def branch = params.BRANCH
+
+assert branch
+
+node (Nodes.DEFAULT) {
+	stage('setup') {
+		def git = new Git()
+		git.clone repo: 'test', ref: branch, localBranch: branch
+	}
+
+	load 'repos/test/etc/jenkins/common.groovy'
+
+	timestamps {
+		def version
+
+		stage('verify') {
+			withNyaDockerRegistry {
+				docker.image(BUILD_IMAGE).inside {
+					ansiColor('xterm') {
+						sh "mvn --file repos/test/pom.xml \
+								--batch-mode \
+								-Dmaven.repo.local=${WORKSPACE}/.repository \
+								-DdryRun=true \
+								release:prepare"
+					}
+				}
+			}
+
+			def pom = readMavenPom file: 'repos/test/pom.xml.tag'
+			version = pom.version
+			input "New version will be ${version}, Is that correct?"
+		}
+
+
+		stage('release') {
+			withNyaDockerRegistry {
+				docker.image(BUILD_IMAGE).inside ('-v /etc/passwd:/etc/passwd -v /etc/ssh:/etc/ssh -v $HOME/.ssh:$HOME/.ssh -v /var/run/docker.sock:/var/run/docker.sock -eDOCKER_HOST=unix:///var/run/docker.sock') {
+					ansiColor('xterm') {
+						withNyaMavenArtefact {
+							sh "mvn --file repos/test/pom.xml \
+									--batch-mode \
+									-Dmaven.repo.local=${WORKSPACE}/.repository \
+									release:clean release:prepare release:perform"
+							// -DautoVersionSubmodules=true \
+						}
+					}
+				}
+			}
+			
+			step([$class: 'JavadocArchiver', javadocDir: 'repos/test/target/apidocs', keepAll: false])			
+		}
+
+		addBuildVersion version: version
+	}
+}
