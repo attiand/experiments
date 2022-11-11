@@ -1,0 +1,27 @@
+plugins {
+    id 'application'
+    id 'org.graalvm.buildtools.native' version '0.9.14'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:31.0.1-jre'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'demo.App'
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
