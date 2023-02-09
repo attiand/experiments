@@ -54,12 +54,14 @@
 		</pluginManagement>
 	</build>
 
+<!--
 	<repositories>
 		<repository>
 			<id>jboss-public-maven-repository</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
+	-->
 
 
 </project>
