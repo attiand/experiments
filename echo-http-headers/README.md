@@ -1,6 +1,6 @@
 # echo-http-headers
 
-List http request headers in the responce body.
+List http request headers in the responce body. *Note* that header name case is changed to canonical format.
 
 ## Build
 
