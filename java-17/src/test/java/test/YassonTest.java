@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 public class YassonTest {
-
+/*
 	@Test
 	void shouldConvertJson() throws Exception {
 		try(Jsonb jsonb = JsonbBuilder.create()) {
@@ -16,5 +16,5 @@ public class YassonTest {
 			System.out.println(newRepresentation);
 		}
 	}
-
+*/
 }

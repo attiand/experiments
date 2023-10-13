@@ -9,6 +9,8 @@ class SlaskTest {
 	@Test
 	void shouldPrintNull() throws Exception {
 
+		System.out.println(SlaskTest.class.getPackageName());
+
 		assertThat(Objects.toString(null)).isEqualTo("null");
 
 		System.out.println(Objects.toString(null) + "hell");

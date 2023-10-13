@@ -6,6 +6,5 @@ import com.bmuschko.gradle.docker.tasks.image.*
 
 task buildMyAppImage(type: DockerBuildImage) {
     inputDir = projectDir
-    images.add('myapp:latest')
     labels.put('status', 'beta')
 }
