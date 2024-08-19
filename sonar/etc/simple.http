@@ -1,0 +1,21 @@
+@host = localhost
+@url = http://{{host}}:8080
+
+
+### Simple GET request
+GET {{url}}/message
+
+
+### 
+GET {{url}}/message/test/cb573056-6c18-11ee
+
+
+#cb573056-6c18-11ee-b962-0242ac120002
+
+### Simple PUT request
+PUT {{url}}/message
+Content-Type: application/json
+
+{
+    "message": ""
+}

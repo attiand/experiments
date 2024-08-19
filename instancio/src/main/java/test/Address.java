@@ -1,6 +1,20 @@
 package test;
 
-import jakarta.validation.constraints.Positive;
+public class Address {
 
-public record Address(String street, @Positive int number, String areaCode) {
+	public String street;
+	public int number;
+	public String areaCode;
+
+	public Address(String mystreet, int i, String code) {
+		this.street = mystreet;
+		this. number = i;
+		this.areaCode = code;
+	}
+
+	public String street() {return street;}
+
+	public int number() {return number;}
+
+	public String areaCode() {return areaCode;}
 }

@@ -7,7 +7,7 @@ class PersonTest {
     @Test
     void shouldConvertRecordToXml() {
         XStream xstream = new XStream();
-        var person = new Person("Mattias", "Andersson", new Address("Björkågatan"));
+        var person = new Person("John", "Doe", new Address("Baker Street"));
         System.out.println(xstream.toXML(person));
     }
 }

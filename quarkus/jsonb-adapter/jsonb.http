@@ -1,0 +1,21 @@
+@host = localhost
+@url = http://{{host}}:8080
+
+
+### Greeting
+GET {{url}}/greeting
+
+### GET Person
+GET {{url}}/person
+
+
+
+### PUT pojo
+PUT {{url}}/person
+Content-Type: application/json
+
+{
+  "firstName": "john",
+  "lastName": "doe",
+  "status": "error"
+}

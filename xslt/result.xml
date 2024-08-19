@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vogellacompany>
+   <online-trainings>
+        <!-- comment -->
+      <training name="Android Development"/>
+      <training name="Eclipse IDE extensions"/>
+      <training name="Rich Client Platform"/>
+   </online-trainings>
+</vogellacompany>

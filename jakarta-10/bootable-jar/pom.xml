@@ -18,7 +18,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 
-		<version.wildfly>27.0.0.Final</version.wildfly>
+		<version.wildfly>32.0.1.Final</version.wildfly>
 		<scm.id>jenkins</scm.id>
 	</properties>
 
@@ -50,7 +50,7 @@
 
 	<dependencies>
 
-		<!-- 3PP -->
+		<!-- SERVER -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -74,6 +74,18 @@
 			<artifactId>microprofile-health-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+		</dependency>
+
+		<!-- 3PP -->
 
 		<dependency>
 			<groupId>se.uhr.nya.commons</groupId>
@@ -152,7 +164,7 @@
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-jar-maven-plugin</artifactId>
-				<version>8.1.0.Final</version>
+				<version>11.0.2.Final</version>
 				<configuration>
 					<feature-packs>
 						<feature-pack>
@@ -164,7 +176,6 @@
 						<layer>cdi</layer>
 						<layer>microprofile-config</layer>
 						<layer>microprofile-health</layer>
-						<layer>microprofile-metrics</layer>
 						<layer>microprofile-openapi</layer>
 					</layers>
 					<hollow-jar>true</hollow-jar>

@@ -124,11 +124,11 @@
                         </goals>
                         <configuration>
                             <inputSpec>
-                                https://nya-artefact.its.umu.se/external-api/se.uhr.beda.api/publikt-api/0.0.2/publikt-api-0.0.2.yaml
+                                ${project.basedir}/src/main/resources/openapi/publikt-api-2.0.0.yaml
                             </inputSpec>
                             <!-- <generatorName>jaxrs-resteasy</generatorName> -->
                             <!-- <generatorName>java-helidon-client</generatorName> -->
-                            <generatorName>uhr-jaxrs-server</generatorName>
+                            <generatorName>jaxrs-resteasy</generatorName>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <dateLibrary>java8</dateLibrary>
@@ -137,13 +137,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>se.uhr.maven</groupId>
-                        <artifactId>openapi-generator</artifactId>
-                        <version>0.0.1-SNAPSHOT</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

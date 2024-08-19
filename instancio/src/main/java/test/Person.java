@@ -10,13 +10,14 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        System.out.println("args");
     }
 
-/*
+    /*
     public Person() {
         System.out.println("default");
     }
-*/
+     */
     public String getFirstName() {
         return firstName;
     }

@@ -1,0 +1,2153 @@
+---
+openapi: 3.0.3
+info:
+  title: Beda Publikt API
+  version: 2.0.0
+tags:
+- name: Person
+  description: Operationer per person
+- name: CSN
+  description: Specifikt API för CSN
+- name: Merit
+  description: Operationer per merit
+- name: Api
+paths:
+  /api/v1/api_info:
+    get:
+      tags:
+      - Api
+      summary: Information om api:et
+      description: Returnerar versionsinformation om den exekverande applikationen
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/ApiInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiInfo'
+  /meriter/v1:
+    get:
+      tags:
+      - Merit
+      summary: Söker meriter som uppfyller kriterierna för utfärdande- och registreringsdatum.
+        Resultatet pagineras och sorteras efter tidigast registreringsdatum
+      description: Söker meriter baserat på utfärdande- och registreringsdatum
+      parameters:
+      - name: utfärdandedatumStart
+        in: query
+        description: tidigaste utfärdandedatumet som ska ingå i resultatet
+        required: true
+        schema:
+          $ref: '#/components/schemas/LocalDate'
+      - name: utfärdandedatumSlut
+        in: query
+        description: senaste utfärdandedatumet som ska ingå i resultatet
+        required: true
+        schema:
+          $ref: '#/components/schemas/LocalDate'
+      - name: registreringsdatumStart
+        in: query
+        description: tidigaste registreringsdatumet som ska ingå i resultatet
+        required: true
+        schema:
+          $ref: '#/components/schemas/LocalDate'
+      - name: registreringsdatumSlut
+        in: query
+        description: senaste registreringsdatumet som ska ingå i resultatet
+        required: true
+        schema:
+          $ref: '#/components/schemas/LocalDate'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - name: sidnummer
+        in: query
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - name: sidstorlek
+        in: query
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Sökningen gick bra
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/PublikMeritSokresultatRepresentation'
+        "400":
+          description: Felaktigheter med sökparametrarna
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guv5/examensbevishogskoleforberedandeexamen/validera:
+    post:
+      tags:
+      - Merit
+      summary: Validerar underlaget utan att skapa en ny högskoleförberedandegymnasialexamen
+      description: Validerar en högskoleförberedandeexamen
+      parameters:
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      requestBody:
+        description: Underlag som ska valideras för den aktuella typen.
+        content:
+          application/vnd.beda.v1+json:
+            schema:
+              $ref: '#/components/schemas/ValideraExamensbevisHogskoleforberedandeExamenGuv5Request'
+        required: true
+      responses:
+        "200":
+          description: Validering ok
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/ValideringsresultatRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guv5/examensbevishogskoleforberedandeexamen/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig Högskoleförberedandegymnasialexamen
+      description: Hämtar en befintlig högskoleförberedandegymnasialexamen från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelExamensbevisHogskoleforberedandeExamenGuv5Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guv5/examensbevisyrkesexamen/validera:
+    post:
+      tags:
+      - Merit
+      summary: Validerar underlaget utan att skapa en ny yrkesgymnasialexamen
+      description: Validerar en yrkesexamen
+      parameters:
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      requestBody:
+        description: Underlag som ska valideras för den aktuella typen.
+        content:
+          application/vnd.beda.v1+json:
+            schema:
+              $ref: '#/components/schemas/ValideraExamensbevisYrkesexamenGuv5Request'
+        required: true
+      responses:
+        "200":
+          description: Validering ok
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/ValideringsresultatRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guv5/examensbevisyrkesexamen/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig yrkesexamen gymnasiet
+      description: Hämtar en befintlig gymnasial yrkesexamen från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelExamensbevisYrkesexamenGuv5Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guv5/gymnasieintyg/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta ett befintligt Gymnasieintyg
+      description: Hämtar ett befintligt Gymnasieintyg från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelGymnasieintygGuv5Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guv5/studiebevis/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta ett befintligt Studiebevis
+      description: Hämtar ett befintligt Studiebevis från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelStudiebevisGuv5Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/gymnasie/guvx/slutbetyg/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta ett befintligt slutbetyg
+      description: Hämtar ett befintligt slutbetyg från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelSlutbetygGuvXRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv1/kurs/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en komvux lös kurs merit
+      description: Hämta en befintlig komvux  lös kurs merit från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelKursVuv1Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv1/slutbetygvuxmp/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig komvux slutbetyg vuxmp
+      description: Hämta en befintlig komvux slutbetyg vuxmp från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelSlutbetygVUXMPRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv1/slutbetygvuxnp/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig komvux slutbetyg vuxnp
+      description: Hämta en befintlig komvux slutbetyg vuxnp från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelSlutbetygVUXNPRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv2/examensbevishogskoleforberedandeexamen/validera:
+    post:
+      tags:
+      - Merit
+      summary: Validerar underlaget utan att skapa en ny högskoleförberedandegymnasialexamen
+      description: Validerar en högskoleförberedandeexamen
+      parameters:
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      requestBody:
+        description: Underlag som ska valideras för den aktuella typen.
+        content:
+          application/vnd.beda.v1+json:
+            schema:
+              $ref: '#/components/schemas/ValideraExamensbevisHogskoleforberedandeExamenVuv2Request'
+        required: true
+      responses:
+        "200":
+          description: Validering ok
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/ValideringsresultatRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv2/examensbevishogskoleforberedandeexamen/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig komvux högskoleförberedande examen
+      description: Hämta en befintlig komvux högskoleförberedande examen från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelExamensbevisHogskoleforberedandeExamenVuv2Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv2/examensbevisyrkesexamen/validera:
+    post:
+      tags:
+      - Merit
+      summary: Validerar underlaget utan att skapa en ny yrkesgymnasialexamen
+      description: Validerar en yrkesexamen
+      parameters:
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      requestBody:
+        description: Underlag som ska valideras för den aktuella typen.
+        content:
+          application/vnd.beda.v1+json:
+            schema:
+              $ref: '#/components/schemas/ValideraExamensbevisYrkesexamenVuv2Request'
+        required: true
+      responses:
+        "200":
+          description: Validering ok
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/ValideringsresultatRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv2/examensbevisyrkesexamen/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig komvux yrkesexamen
+      description: Hämtar en befintlig komvux yrkesexamen från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelExamensbevisYrkesexamenVuv2Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv3/examensbevishogskoleforberedandeexamen/validera:
+    post:
+      tags:
+      - Merit
+      summary: Validerar underlaget utan att skapa en ny högskoleförberedandegymnasialexamen
+      description: Validerar en högskoleförberedandeexamen
+      parameters:
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      requestBody:
+        description: Underlag som ska valideras för den aktuella typen.
+        content:
+          application/vnd.beda.v1+json:
+            schema:
+              $ref: '#/components/schemas/ValideraExamensbevisHogskoleforberedandeExamenVuv3Request'
+        required: true
+      responses:
+        "200":
+          description: Validering ok
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/ValideringsresultatRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/komvux/vuv3/examensbevishogskoleforberedandeexamen/{meritId}:
+    get:
+      tags:
+      - Merit
+      summary: Hämta en befintlig komvux högskoleförberedande examen
+      description: Hämta en befintlig komvux högskoleförberedande examen från beda
+      parameters:
+      - name: meritId
+        in: path
+        description: Id för den aktuella meriten
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Meriten gick att hämta
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelExamensbevisHogskoleforberedandeExamenVuv3Representation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Meriten finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+  /meriter/v1/personer/{identifikationsnummer}:
+    get:
+      tags:
+      - Person
+      summary: Sök efter person och persons meriter
+      description: Söker efter person på person- eller samordningsnummer
+      parameters:
+      - name: identifikationsnummer
+        in: path
+        description: Identifikationsnummer på den sökta personen
+        required: true
+        schema:
+          pattern: "\\d{12}"
+          type: string
+      - name: anslutningspart
+        in: query
+        description: id för anslutningspart (organisationsnummer)
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - name: syfte
+        in: query
+        description: id för syfte
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: Person hittad
+          content:
+            application/vnd.beda.v1+json:
+              schema:
+                $ref: '#/components/schemas/EntityModelPersonRepresentation'
+        "400":
+          description: Felaktigheter i indatat
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "404":
+          description: Person finns inte
+        "500":
+          description: Oväntat fel i applikationen
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemRepresentation'
+        "503":
+          description: Applikationen ligger nere p.g.a. underhåll
+components:
+  schemas:
+    ApiInfo:
+      type: object
+      properties:
+        api_name:
+          type: string
+        api_version:
+          type: string
+        api_released:
+          $ref: '#/components/schemas/LocalDate'
+        api_documentation:
+          format: uri
+          type: string
+        api_status:
+          $ref: '#/components/schemas/ApiStatus'
+    ApiStatus:
+      enum:
+      - alpha
+      - beta
+      - active
+      - deprecated
+      - retired
+      - decommisioned
+      type: string
+    EntityModelExamensbevisHogskoleforberedandeExamenGuv5Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/ExamensbevisHogskoleforberedandeExamenGuv5Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelExamensbevisHogskoleforberedandeExamenVuv2Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/ExamensbevisHogskoleforberedandeExamenVuv2Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelExamensbevisHogskoleforberedandeExamenVuv3Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/ExamensbevisHogskoleforberedandeExamenVuv3Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelExamensbevisYrkesexamenGuv5Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/ExamensbevisYrkesexamenGuv5Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelExamensbevisYrkesexamenVuv2Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/ExamensbevisYrkesexamenVuv2Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelGymnasieintygGuv5Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/GymnasieintygGuv5Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelKursVuv1Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/KursVuv1Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelPersonRepresentation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikMeritLankRepresentation'
+        content:
+          $ref: '#/components/schemas/PersonRepresentation'
+        metadata:
+          $ref: '#/components/schemas/PersonMetadataRepresentation'
+    EntityModelSlutbetygGuvXRepresentation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/SlutbetygGuvXRepresentation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelSlutbetygVUXMPRepresentation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/SlutbetygVuv1VUXMPRepresentation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelSlutbetygVUXNPRepresentation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/SlutbetygVuv1VUXNPRepresentation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    EntityModelStudiebevisGuv5Representation:
+      type: object
+      properties:
+        länkar:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikLankRepresentation'
+        content:
+          $ref: '#/components/schemas/StudiebevisGuv5Representation'
+        metadata:
+          $ref: '#/components/schemas/MeritMetadataRepresentation'
+    ExamensbevisHogskoleforberedandeExamenGuv5Representation:
+      description: En högskoleförberedande examen gymnasiet
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Studievägskod
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[FU]"
+          type: string
+        elevIGymnasieskolan:
+          description: Eleven var elev i gymnasieskolan när meriten utfärdades
+          type: boolean
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    ExamensbevisHogskoleforberedandeExamenRequest:
+      description: Underlag för en högskoleförberedande examen gymnasiet
+      required:
+      - registreradPerson
+      - registreradMeritutfärdare
+      - utfärdandedatum
+      - studievägskod
+      - elevensStudieplan
+      - omfattning
+      - elevIGymnasieskolan
+      - gymnasiekursbetyg
+      type: object
+      properties:
+        registreradPerson:
+          description: Vilken person meriten ska registreras på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRequest'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten ska registreras på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRequest'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Programmets studievägskod
+          minLength: 2
+          pattern: \S
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[RFU\\-]"
+          type: string
+        elevIGymnasieskolan:
+          description: Var eleven elev i gymnasieskolan när meriten utfärdades
+          type: boolean
+        notering:
+          description: Övrig notering som hör ihop med meriten
+          type: string
+          nullable: true
+        gymnasiekursbetyg:
+          description: Ingående gymnasiekursbetyg i examen
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRequest'
+    ExamensbevisHogskoleforberedandeExamenVuv2Representation:
+      description: En högskoleförberedande examen komvux
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        motsvarandeProgramnamn:
+          description: Programnamn i gymnasieskolan
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    ExamensbevisHogskoleforberedandeExamenVuv3Representation:
+      description: En högskoleförberedande examen komvux
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+        studieområdeskod:
+          description: Studieområdeskod för examen
+          type: string
+    ExamensbevisYrkesexamenGuv5Representation:
+      description: En yrkesexamen gymnasiet
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Studievägskod
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[FU]"
+          type: string
+        elevIGymnasieskolan:
+          description: Eleven var elev i gymnasieskolan när meriten utfärdades
+          type: boolean
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+        grundläggandeBehörighet:
+          description: Meriten ger grundläggande behörighet
+          type: boolean
+    ExamensbevisYrkesexamenVuv2Representation:
+      description: En yrkesexamen komvux
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        motsvarandeProgramnamn:
+          description: Programnamn i gymnasieskolan
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+        grundläggandeBehörighet:
+          description: Meriten ger grundläggande behörighet
+          type: boolean
+    GrundskolekursbetygRepresentation:
+      description: Grundskolekurs
+      type: object
+      properties:
+        kurskod:
+          description: Kurskod för grundskolekursen
+          type: string
+        betygsvärde:
+          description: Betyg på kursen
+          type: string
+    GymnasieintygGuv5Representation:
+      description: Ett gymnasieintyg
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Studievägskod
+          type: string
+        grundskolekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GrundskolekursbetygRepresentation'
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    GymnasiekursbetygRepresentation:
+      description: Kursrad i meriten
+      type: object
+      properties:
+        gymnasiekurskod:
+          description: Kurskod för gymnasiekursen
+          type: string
+        betygsvärde:
+          description: Betyg på kursen
+          pattern: -|---|\*\*\*|IG|G|VG|MVG|A|B|C|D|E|F
+          type: string
+        poäng:
+          format: int32
+          description: Kurspoäng
+          type: integer
+        markeringar:
+          description: "Markeringar - tillåtna värden är AN, DK, GR, LK, LT, O, P,\
+            \ SK, U, V och ÄP"
+          type: array
+          items:
+            type: string
+        övrigaUpplysningar:
+          description: Övrig upplysning gällande kursen
+          type: string
+    GymnasiekursbetygRequest:
+      description: Underlag för en gymnasiekurs
+      required:
+      - gymnasiekurskod
+      - betygsvärde
+      - poäng
+      - markeringar
+      type: object
+      properties:
+        gymnasiekurskod:
+          description: Kurskod för gymnasiekursen
+          type: string
+        betygsvärde:
+          description: Betyg på kursen
+          pattern: -|---|\*\*\*|IG|G|VG|MVG|A|B|C|D|E|F
+          type: string
+        poäng:
+          format: int32
+          description: Kursens poäng
+          type: integer
+        markeringar:
+          description: "Markeringar - tillåtna värden är AN, DK, GR, LK, LT, O, P,\
+            \ SK, U, V och ÄP"
+          type: array
+          items:
+            type: string
+        övrigaUpplysningar:
+          description: Övrig upplysning gällande kursen
+          type: string
+          nullable: true
+    IdMedBeskrivningMerittypRepresentation:
+      type: object
+      properties:
+        id:
+          format: int32
+          type: integer
+        beskrivning:
+          type: string
+    IdentitetRepresentation:
+      type: object
+      properties:
+        identifikationsnummer:
+          type: string
+    KursVuv1Representation:
+      description: En lös kurs för komvux för vuv1 och framåt
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        gymnasiekursbetyg:
+          $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    LankMeritMetadataRepresentation:
+      type: object
+      properties:
+        merittypsId:
+          format: int32
+          type: integer
+        utfärdandedatum:
+          $ref: '#/components/schemas/LocalDate'
+    LocalDate:
+      format: date
+      type: string
+      example: 2022-03-10
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: 2022-03-10T12:15:50
+    MeritMetadataRepresentation:
+      type: object
+      properties:
+        registreringsdatum:
+          $ref: '#/components/schemas/LocalDate'
+        senastÄndrad:
+          $ref: '#/components/schemas/LocalDateTime'
+        forceringsinformation:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValideringsproblemRepresentation'
+    PersonMetadataRepresentation:
+      type: object
+    PersonRepresentation:
+      type: object
+      properties:
+        skyddad:
+          $ref: '#/components/schemas/LocalDateTime'
+        identiteter:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentitetRepresentation'
+    ProblemRepresentation:
+      required:
+      - type
+      - title
+      - status
+      - detail
+      - instance
+      type: object
+      properties:
+        type:
+          format: uri
+          description: Ev. dokumentation av problemet
+          type: string
+        title:
+          description: Problemtitel
+          type: string
+        status:
+          format: int32
+          description: HTTP statuskod
+          type: integer
+        detail:
+          description: Detaljerad beskrivning av problemet
+          type: string
+        instance:
+          format: uri
+          description: Själva instansen som anropades när problemet uppkom
+          type: string
+        valideringsproblem:
+          description: Valideringsproblem med mer granulär beskrivning av problemet
+          type: array
+          items:
+            $ref: '#/components/schemas/ValideringsproblemRepresentation'
+    PublikLankRepresentation:
+      type: object
+      properties:
+        href:
+          description: URL som länken pekar på
+          type: string
+        rel:
+          description: Relation till länken
+          type: string
+        method:
+          description: HTTP-metod som ska användas
+          type: string
+        enctype:
+          description: Mediatyp som ska användas
+          type: string
+    PublikMeritLankRepresentation:
+      type: object
+      properties:
+        href:
+          description: URL som länken pekar på
+          type: string
+        rel:
+          description: Relation till länken
+          type: string
+        method:
+          description: HTTP-metod som ska användas
+          type: string
+        enctype:
+          description: Mediatyp som ska användas
+          type: string
+        metadata:
+          description: Metadata med mer information om vad länken pekar på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/LankMeritMetadataRepresentation'
+    PublikMeritSokresultatRepresentation:
+      type: object
+      properties:
+        sokresultat:
+          description: Lista med sökresultat
+          type: array
+          items:
+            $ref: '#/components/schemas/PublikMeritlankOchMerittypRepresentation'
+    PublikMeritlankOchMerittypRepresentation:
+      type: object
+      properties:
+        href:
+          description: URL till meriten
+          type: string
+        merittyp:
+          format: int32
+          description: Meritens typ
+          type: integer
+    RegistreradMeritutfardareRepresentation:
+      description: Meritutfärdaren som meriten registrerades på
+      type: object
+      properties:
+        meritutfärdarekod:
+          description: Skolenhetenskod vid registreringstillfället
+          type: string
+        namn:
+          description: Skolenhetens namn vid registreringstillfället
+          type: string
+    RegistreradMeritutfardareRequest:
+      description: Meritutfärdaren som meriten är registrera hos
+      required:
+      - meritutfärdarekod
+      - namn
+      type: object
+      properties:
+        meritutfärdarekod:
+          description: Skolenhetenskod
+          maxLength: 9
+          minLength: 7
+          pattern: \d+
+          type: string
+        namn:
+          description: Skolenhetens namn
+          pattern: \S
+          type: string
+    RegistreradPersonRepresentation:
+      description: Personen som meriten registrerades på
+      type: object
+      properties:
+        identitet:
+          description: "Personens identifikationsnummer, person- eller samordningsnummer,\
+            \ som meriten registrerades på"
+          type: string
+        namn:
+          description: Personens namn som meriten registrerades på
+          type: string
+    RegistreradPersonRequest:
+      description: Person som meriten är registrerad på
+      required:
+      - identifikationsnummer
+      - namn
+      type: object
+      properties:
+        identifikationsnummer:
+          description: Personens person- eller samordningsnummer
+          maxLength: 12
+          minLength: 12
+          type: string
+        namn:
+          description: Personens namn
+          maxLength: 255
+          pattern: \S
+          type: string
+    SamlatBetygsdokumentRepresentation:
+      description: Ett samlat betygsdokument
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan
+          type: integer
+        programmetsOmfattningIPoäng:
+          format: int32
+          description: Programmets omfattning i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[RFU\\-]"
+          type: string
+        studievägskod:
+          description: Studievägskod
+          type: string
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    SlutbetygGuvXRepresentation:
+      description: Ett slutbetyg gymnasiet
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan
+          type: integer
+        programmetsOmfattningIPoäng:
+          format: int32
+          description: Programmets omfattning i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[RFU\\-]"
+          type: string
+        studievägskod:
+          description: Studievägskod
+          type: string
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    SlutbetygVuv1VUXMPRepresentation:
+      description: Ett komvux MP slutbetyg
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    SlutbetygVuv1VUXNPRepresentation:
+      description: Ett komvux NP slutbetyg
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    StudiebevisGuv5Representation:
+      description: Ett studiebevis
+      type: object
+      properties:
+        id:
+          description: Meritens unika id
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        merittyp:
+          description: "Meritens merittyp, id och beskrivning"
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/IdMedBeskrivningMerittypRepresentation'
+        registreradPerson:
+          description: Vilken person meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradPersonRepresentation'
+        registreradMeritutfärdare:
+          description: Vilken meritutfärdare meriten är registrerad på
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/RegistreradMeritutfardareRepresentation'
+        utfärdandedatum:
+          description: Utfärdandedatum
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Studievägskod
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[FU]"
+          type: string
+        notering:
+          description: Notering som hör ihop med meriten
+          type: string
+        gymnasiekursbetyg:
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRepresentation'
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string
+    ValideraExamensbevisHogskoleforberedandeExamenGuv5Request:
+      description: Underlag för validering av en högskoleförberedande examen gymnasiet
+      required:
+      - utfärdandedatum
+      - studievägskod
+      - elevensStudieplan
+      - omfattning
+      - elevIGymnasieskolan
+      - gymnasiekursbetyg
+      type: object
+      properties:
+        utfärdandedatum:
+          description: Utfärdandedatum som följer ISO-8601
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Programmets studievägskod
+          minLength: 2
+          pattern: \S
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[RFU\\-]"
+          type: string
+        elevIGymnasieskolan:
+          description: Var eleven elev i gymnasieskolan när meriten utfärdades
+          type: boolean
+        gymnasiekursbetyg:
+          description: Ingående gymnasiekursbetyg i examen
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRequest'
+    ValideraExamensbevisHogskoleforberedandeExamenVuv2Request:
+      description: Underlag för validering av en högskoleförberedande komvuxexamen
+      required:
+      - utfärdandedatum
+      - elevensStudieplan
+      - gymnasiekursbetyg
+      - motsvarandeProgramnamn
+      type: object
+      properties:
+        utfärdandedatum:
+          description: Utfärdandedatum som följer ISO-8601
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        motsvarandeProgramnamn:
+          description: Motsvarande programnamn
+          type: string
+          nullable: true
+        gymnasiekursbetyg:
+          description: Ingående gymnasiekursbetyg i examen
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRequest'
+    ValideraExamensbevisHogskoleforberedandeExamenVuv3Request:
+      description: Underlag för validering av en högskoleförberedande komvuxexamen
+      required:
+      - utfärdandedatum
+      - studieområdeskod
+      - elevensStudieplan
+      - gymnasiekursbetyg
+      type: object
+      properties:
+        utfärdandedatum:
+          description: Utfärdandedatum som följer ISO-8601
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studieområdeskod:
+          description: Programmets studieområdeskod
+          maxLength: 2
+          minLength: 2
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        gymnasiekursbetyg:
+          description: Ingående gymnasiekursbetyg i examen
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRequest'
+    ValideraExamensbevisYrkesexamenGuv5Request:
+      description: Underlag för validering av en yrkesexamen gymnasiet
+      required:
+      - utfärdandedatum
+      - studievägskod
+      - elevensStudieplan
+      - omfattning
+      - elevIGymnasieskolan
+      - grundläggandeBehörighet
+      - gymnasiekursbetyg
+      type: object
+      properties:
+        utfärdandedatum:
+          description: Utfärdandedatum som följer ISO-8601
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        studievägskod:
+          description: Programmets studievägskod
+          minLength: 2
+          type: string
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        omfattning:
+          description: Meritens omfattning
+          pattern: "[RFU\\-]"
+          type: string
+        elevIGymnasieskolan:
+          description: Var eleven elev i gymnasieskolan när meriten utfärdades
+          type: boolean
+        grundläggandeBehörighet:
+          description: Examen ger grundläggandebehörighet
+          type: boolean
+        gymnasiekursbetyg:
+          description: Ingående gymnasiekursbetyg i examen
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRequest'
+    ValideraExamensbevisYrkesexamenVuv2Request:
+      description: Underlag för validering av en yrkesexamen komvux
+      required:
+      - utfärdandedatum
+      - elevensStudieplan
+      - grundläggandeBehörighet
+      - gymnasiekursbetyg
+      type: object
+      properties:
+        utfärdandedatum:
+          description: Utfärdandedatum som följer ISO-8601
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/LocalDate'
+        elevensStudieplan:
+          format: int32
+          description: Elevens studieplan i poäng
+          type: integer
+        motsvarandeProgramnamn:
+          description: Motsvarande programnamn
+          type: string
+          nullable: true
+        grundläggandeBehörighet:
+          description: Examen ger grundläggandebehörighet
+          type: boolean
+        gymnasiekursbetyg:
+          description: Ingående gymnasiekursbetyg i examen
+          type: array
+          items:
+            $ref: '#/components/schemas/GymnasiekursbetygRequest'
+    ValideringsproblemRepresentation:
+      required:
+      - meddelande
+      - metadata
+      type: object
+      properties:
+        regel:
+          description: Regel-id vid regelbrott
+          type: string
+        meddelande:
+          description: Detaljerat meddelande om felet
+          type: string
+        metadata:
+          description: Metadata som kan vara orsaken till problemet
+          type: array
+          items:
+            type: string
+    ValideringsresultatRepresentation:
+      type: object
+      properties:
+        valideringsproblem:
+          description: Valideringsproblem med mer granulär beskrivning av problemet
+          type: array
+          items:
+            $ref: '#/components/schemas/ValideringsproblemRepresentation'
+  securitySchemes:
+    SecurityScheme:
+      type: http
+      description: Authentication
+      scheme: basic

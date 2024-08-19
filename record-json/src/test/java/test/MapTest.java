@@ -1,11 +1,8 @@
 package test;
 
-import java.util.HashMap;
 import java.util.Map;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
-import org.jeasy.random.EasyRandom;
-import org.jeasy.random.EasyRandomParameters;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
