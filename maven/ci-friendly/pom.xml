@@ -8,14 +8,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
         <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
     <modules>
+        <!-- <module>parent</module> -->
         <module>module1</module>
+        <module>module2</module>        
     </modules>
 
+          <!--
     <build>
         <plugins>
           <plugin>
@@ -45,5 +48,6 @@
           </plugin>
         </plugins>
         </build>
+        -->
 
 </project>

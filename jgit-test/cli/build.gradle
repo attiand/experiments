@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
 }
 
-def jgitVersion = "6.4.0.202211300538-r"
+def jgitVersion = "7.0.0.202409031743-r"
 def jschVersion = "0.1.55"
 def jschAgentVersion = "0.0.9"
 

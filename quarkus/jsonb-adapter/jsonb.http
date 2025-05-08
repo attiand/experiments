@@ -17,5 +17,5 @@ Content-Type: application/json
 {
   "firstName": "john",
   "lastName": "doe",
-  "status": "error"
+  "status": "errors"
 }

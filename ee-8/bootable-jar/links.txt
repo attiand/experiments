@@ -1,7 +1,0 @@
-https://developer.jboss.org/thread/169732
-
-
-https://github.com/wildfly-extras/wildfly-datasources-galleon-pack
-
-
-https://github.com/wildfly-extras/wildfly-jar-maven-plugin/blob/2.0.0.Final/examples/postgresql/pom.xml

@@ -1,12 +1,13 @@
 package org.acme;
 
 import java.util.Arrays;
-import jakarta.json.bind.adapter.JsonbAdapter;
-import jakarta.json.bind.annotation.JsonbTypeAdapter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonbTypeAdapter(Status.Adapter.class)
+//@JsonbTypeAdapter(Status.Adapter.class)
 public enum Status {
+	@JsonProperty("ok")
 	OK("ok"),
+	@JsonProperty("error")
 	ERROR("error");
 
 	private final String value;
@@ -21,7 +22,7 @@ public enum Status {
 				.findFirst()
 				.orElseThrow(() -> new IllegalArgumentException("Unknown value: " + value));
 	}
-
+/*
 	public static class Adapter implements JsonbAdapter<Status, String> {
 
 		@Override
@@ -34,4 +35,5 @@ public enum Status {
 			return Status.fromValue(value);
 		}
 	}
+ */
 }

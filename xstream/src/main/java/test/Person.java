@@ -1,7 +1,6 @@
 package test;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public record Person(String firstName, String lastName, Address address)  {
 

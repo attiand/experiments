@@ -1,0 +1,4 @@
+GET http://localhost:8080/otel-metrics-0.0.1-SNAPSHOT
+Accept: application/json
+
+###

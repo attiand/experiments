@@ -5,17 +5,10 @@
 	<version>0.0.3-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<parent>
-		<groupId>se.uhr.nya</groupId>
-		<artifactId>nya.super.pom</artifactId>
-		<version>1.23</version>
-	</parent>
-
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<failOnMissingWebXml>false</failOnMissingWebXml>
 	</properties>
 
 	<dependencyManagement>
@@ -84,16 +77,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.3.2</version>
+				<version>3.4.0</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>project-nya</id>
-			<name>ITS Project repository for NyA</name>
-			<url>https://nya-artefact.its.umu.se/super-pom</url>
-		</repository>
-	</repositories>
 </project>

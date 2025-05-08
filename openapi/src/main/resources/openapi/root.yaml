@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info: 
+  version: 1.0.0
+  title: Testing Open Api Spec
+  description: > 
+    Simple API to test the Open API Specification.
+servers: 
+  - url: http://localhost:8080/api/v1
+    description: test server
+paths:
+  /health:
+    get:
+      tags: [Health]
+      description: this endpoint will test the health of the api
+      responses:
+        '200':
+          description: it will return a success message
+          content:
+            application/json:
+              schema:
+                $ref: 'schemas.yaml#/schemas/Health'
+        '500':
+          description: The Server is down
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: server is down

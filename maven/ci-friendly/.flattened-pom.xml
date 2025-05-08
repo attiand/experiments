@@ -8,6 +8,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>module1</module>
+    <module>module2</module>
   </modules>
   <properties>
     <maven.compiler.release>17</maven.compiler.release>

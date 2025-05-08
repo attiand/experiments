@@ -1,0 +1,30 @@
+@host = localhost
+@url = http://{{host}}:8080
+
+
+### Get
+GET {{url}}/hello
+Accept: application/json
+
+
+### Update
+PUT {{url}}/hello
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "address": [
+    {
+      "country": "123 Main St"
+    }
+    ]
+}
+
+
+
+### Check parameter
+GET {{url}}/hello/param/30
+
+
+

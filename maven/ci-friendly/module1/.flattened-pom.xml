@@ -9,4 +9,11 @@
   </parent>
   <artifactId>module1</artifactId>
   <version>1.0.0-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>org.test</groupId>
+      <artifactId>module2</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

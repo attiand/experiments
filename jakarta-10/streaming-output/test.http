@@ -1,0 +1,14 @@
+@host = localhost
+@url = http://{{host}}:8080/streaming-output-1.0.0-SNAPSHOT/api
+
+###
+
+
+
+
+### test
+GET {{url}}/hello
+
+
+### OpenAPI
+GET {{url}}/openapi

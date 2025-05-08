@@ -5,12 +5,6 @@
     <artifactId>instancio-test</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <parent>
-        <groupId>se.uhr.nya</groupId>
-        <artifactId>nya.super.pom</artifactId>
-        <version>3.0.0</version>
-    </parent>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
@@ -111,12 +105,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>project-nya</id>
-            <name>ITS Project repository for NyA</name>
-            <url>https://nya-artefact.nya-srv.its.umu.se/super-pom</url>
-        </repository>
-    </repositories>
 </project>

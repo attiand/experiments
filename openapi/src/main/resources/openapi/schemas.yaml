@@ -1,0 +1,7 @@
+schemas:
+    Health:
+      type: object
+      properties:
+        message:
+          type: string
+          example: ok

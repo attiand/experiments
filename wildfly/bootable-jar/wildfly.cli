@@ -1,0 +1,4 @@
+/system-property=test:add(value="$${db.target:$${target:localhost}}")
+
+/subsystem=logging/json-formatter=JSON:add(pretty-print=true, exception-output-type=formatted)
+

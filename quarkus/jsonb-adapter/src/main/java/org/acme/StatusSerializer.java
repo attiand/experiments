@@ -2,15 +2,9 @@ package org.acme;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import jakarta.json.bind.annotation.JsonbTypeDeserializer;
-import jakarta.json.bind.annotation.JsonbTypeSerializer;
-import jakarta.json.bind.serializer.DeserializationContext;
-import jakarta.json.bind.serializer.JsonbDeserializer;
-import jakarta.json.bind.serializer.JsonbSerializer;
-import jakarta.json.bind.serializer.SerializationContext;
 import jakarta.json.stream.JsonGenerator;
 import jakarta.json.stream.JsonParser;
-
+/*
 @JsonbTypeSerializer(StatusSerializer.Serializer.class)
 @JsonbTypeDeserializer(StatusSerializer.Deserializer.class)
 public enum StatusSerializer {
@@ -40,3 +34,4 @@ public enum StatusSerializer {
 		}
 	}
 }
+*/

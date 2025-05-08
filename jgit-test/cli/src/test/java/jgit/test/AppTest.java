@@ -3,10 +3,75 @@
  */
 package jgit.test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.StreamSupport;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.DepthWalk;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class AppTest {
-    @Test public void appHasAGreeting() {
-    }
+
+	private static final Pattern SEMVER_REGEX = Pattern.compile("(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)");
+
+	record Ident(String email, String name) {
+
+	}
+
+	record Commit(String id, String fullMessage, Ident committer, Ident author) {
+
+	}
+
+	@Test
+	public void appHasAGreeting() {
+		List<Commit> unreleased = getUnreleasedCommits();
+
+		System.out.println(unreleased);
+	}
+
+	private List<Commit> getUnreleasedCommits() {
+		try (Git git = Git.open(new File("/home/maan0496/git/slask"))) {
+			ObjectId head = git.getRepository().resolve("master");
+			return StreamSupport.stream(git.log().add(head).call().spliterator(), false)
+					.takeWhile(commit -> !hasSemanticVersionTag(git, commit))
+					.map(c -> new Commit(c.getName(), c.getFullMessage(), convert(c.getCommitterIdent()), convert(c.getAuthorIdent())))
+					.toList();
+		} catch (GitAPIException | IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Ident convert(PersonIdent personIdent) {
+		return new Ident(personIdent.getEmailAddress(), personIdent.getName());
+	}
+
+	private static boolean hasSemanticVersionTag(Git git, RevCommit commit) {
+		try {
+			return git.tagList()
+					.setContains(commit)
+					.call()
+					.stream()
+					.map(Ref::getName)
+					.map(Repository::shortenRefName)
+					.anyMatch(AppTest::isSemanticVersion);
+		} catch (IOException | GitAPIException e) {
+			throw new GitException(e);
+		}
+	}
+
+	private static boolean isSemanticVersion(String version) {
+		return SEMVER_REGEX.matcher(version).matches();
+	}
 }
