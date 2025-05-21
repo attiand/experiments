@@ -25,13 +25,15 @@ class MultiPartTest {
 
 	@Test
 	void shouldPerformMultiPartRequest() throws IOException {
-		URI uri = UriBuilder.fromUri("http://localhost:8080").path("order/file").build();
+		//URI uri = UriBuilder.fromUri("http://localhost:8080").path("order/file").build();
+		URI uri = UriBuilder.fromUri("http://localhost:8080").path("admin/database").build();
+
 		var path = Paths.get("src/main/resources/order.txt");
 
 		try(InputStream is  = Files.newInputStream(path)) {
 			final List<EntityPart> multipart =
 					List.of(EntityPart.withName("name").content(path.toString().getBytes()).mediaType(MediaType.TEXT_PLAIN_TYPE).build(),
-							EntityPart.withName("content").content(is).mediaType(MediaType.TEXT_PLAIN_TYPE).build());
+							EntityPart.withName("content").content(is).mediaType(MediaType.APPLICATION_OCTET_STREAM_TYPE).build());
 
 			try (Client client = ClientBuilder.newBuilder().register(ClientResponseLogFilter.class).build()) {
 				try (Response response = client.target(uri).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(new GenericEntity<>(multipart) {
