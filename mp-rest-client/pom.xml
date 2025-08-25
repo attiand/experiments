@@ -7,15 +7,15 @@
     <artifactId>code-with-quarkus</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <properties>
-        <compiler-plugin.version>3.11.0</compiler-plugin.version>
-        <maven.compiler.release>17</maven.compiler.release>
+        <compiler-plugin.version>3.14.0</compiler-plugin.version>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.0.3.Final</quarkus.platform.version>
+        <quarkus.platform.version>3.23.3</quarkus.platform.version>
         <skipITs>true</skipITs>
-        <surefire-plugin.version>3.0.0</surefire-plugin.version>
+        <surefire-plugin.version>3.5.3</surefire-plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -57,6 +57,14 @@
             <artifactId>assertj-core</artifactId>
             <version>3.24.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.quarkiverse.wiremock</groupId>
+            <artifactId>quarkus-wiremock-test</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -72,6 +80,7 @@
                             <goal>build</goal>
                             <goal>generate-code</goal>
                             <goal>generate-code-tests</goal>
+                            <goal>native-image-agent</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -80,9 +89,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-parameters</arg>
-                    </compilerArgs>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>
@@ -104,16 +111,60 @@
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <maven.home>${maven.home}</maven.home>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.13.0</version>
+                <executions>
+                    <execution>
+                        <id>client-generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
                         <configuration>
-                            <systemPropertyVariables>
-                                <native.image.path>${project.build.directory}/${project.build.finalName}-runner
-                                </native.image.path>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
+                            <ignoreFileOverride>${project.basedir}/ignore</ignoreFileOverride>
+                            <inputSpec>
+                                https://nya-artefact.its.umu.se/nya-api-spec/internal/anvandare/auktorisering/0.0.3/openapi.yaml
+                            </inputSpec>
+                            <generatorName>uhr-mp-rest-client</generatorName>
+                            <output>${project.build.directory}/generated-sources/openapi</output>
+                            <apiPackage>se.uhr.nya.startsida.backend.control.facade.authentication</apiPackage>
+                            <modelPackage>se.uhr.nya.anvandare.auktorisering.api</modelPackage>
+                            <typeMappings>
+                                <!-- <typeMapping>string+systemaktivitet=SystemAktivitet</typeMapping> -->
+                            </typeMappings>
+                            <importMappings>
+                                <!--<importMapping>SystemAktivitet=se.uhr.nya.anvandare.definitioner.systemaktivitet.SystemAktivitet</importMapping> -->
+                            </importMappings>
+                            <configOptions>
+                                <useBeanValidation>false</useBeanValidation>
+                                <!--<configKey>se.uhr.nya.startsida.backend.control.facade.authentication.AuktoriseringService</configKey>-->
+                                <!-- <baseUri>http://nya-05.nya-srv.its.umu.se:8090/auktorisering</baseUri> -->
+                                <!-- <modelType>jackson</modelType> -->
+                                <sourceFolder>src/main/java</sourceFolder>
+                                <skipExceptionMapper>true</skipExceptionMapper>
+                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>se.uhr.maven</groupId>
+                        <artifactId>openapi-generator</artifactId>
+                        <version>4.4.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

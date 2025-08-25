@@ -2,9 +2,9 @@ package org.acme;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Set;
-import acme.Extension;
 import acme.MyRemoteService;
+import acme.Version;
+
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
@@ -17,15 +17,15 @@ class MyRemoteServiceTest {
 
 	@Test
 	void shouldCallProgrammatically() throws URISyntaxException {
-		URI apiUri = new URI("https://stage.code.quarkus.io/api");
+		URI apiUri = new URI("http://nya-01.nya-srv.its.umu.se:61080/api");
 		MyRemoteService remote = RestClientBuilder.newBuilder().baseUri(apiUri).build(MyRemoteService.class);
 
-		Response response = remote.getExtensionsById("io.quarkus:quarkus-rest-client");
+		Response response = remote.version();
 
 		assertThat(response.getStatus()).isEqualTo(200);
 
-		Set<Extension> extensions = response.readEntity(new GenericType<Set<Extension>>() {});
+		Version version = response.readEntity(Version.class);
 
-		extensions.forEach(System.out::println);
+		System.out.println(version);
 	}
 }

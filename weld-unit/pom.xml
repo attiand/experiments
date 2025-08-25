@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>test</groupId>
-    <artifactId>java-21</artifactId>
+    <artifactId>weld-unit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
@@ -10,57 +10,32 @@
         <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
-    <!--
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.jboss.resteasy.microprofile</groupId>
-                <artifactId>resteasy-microprofile-bom</artifactId>
-                <version>3.0.0.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>1.17.6</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
--->
 
     <dependencies>
-        <dependency>
-            <groupId>org.jboss.resteasy.microprofile</groupId>
-            <artifactId>microprofile-rest-client</artifactId>
-            <version>3.0.1.Final</version>
-        </dependency>
-
 
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-client</artifactId>
-            <version>6.2.12.Final</version>
-            <scope>compile</scope>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>4.1.0</version>
         </dependency>
 
-        <!--
-
-        <dependency>
-            <groupId>org.jboss.resteasy.microprofile</groupId>
-            <artifactId>microprofile-config</artifactId>
-        </dependency>
-        -->
-
-
-        <dependency>
-            <groupId>io.smallrye.config</groupId>
-            <artifactId>smallrye-config</artifactId>
-            <version>3.9.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-json-binding-provider</artifactId>
-            <version>6.2.10.Final</version>
-        </dependency>
 
         <!-- TEST -->
+
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-junit5</artifactId>
+            <version>4.0.5.Final</version>
+        </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
@@ -72,19 +47,13 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.9.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>4.9.0</version>
+            <version>5.18.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>4.9.0</version>
+            <version>5.18.0</version>
             <scope>test</scope>
         </dependency>
 

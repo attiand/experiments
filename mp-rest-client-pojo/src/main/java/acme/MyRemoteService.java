@@ -22,7 +22,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 public interface MyRemoteService {
 
 	@GET
-	@Path("/extensions")
-	Response getExtensionsById(@QueryParam("id") String id);
+	@Path("/applikation/version")
+	Response version();
 
 }
