@@ -26,6 +26,7 @@ class MyRemoteServiceTest {
 
 		Version version = response.readEntity(Version.class);
 
+        System.out.println(version.scm());
 		System.out.println(version);
 	}
 }

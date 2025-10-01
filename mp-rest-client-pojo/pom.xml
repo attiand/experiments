@@ -8,6 +8,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
+        <version.resteasy>7.0.0.Final</version.resteasy>
     </properties>
 
     <!--
@@ -35,7 +36,7 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
-            <version>6.2.12.Final</version>
+            <version>${version.resteasy}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -51,13 +52,13 @@
         <dependency>
             <groupId>io.smallrye.config</groupId>
             <artifactId>smallrye-config</artifactId>
-            <version>3.9.1</version>
+            <version>3.14.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-json-binding-provider</artifactId>
-            <version>6.2.10.Final</version>
+            <version>${version.resteasy}</version>
         </dependency>
 
         <!-- TEST -->
