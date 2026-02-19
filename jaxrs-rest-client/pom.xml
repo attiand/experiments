@@ -38,6 +38,12 @@
             <version>6.2.12.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-json-binding-provider</artifactId>
+            <version>6.2.12.Final</version>
+        </dependency>
+
         <!-- TEST -->
 
         <dependency>
@@ -102,17 +108,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>jboss-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>

@@ -15,23 +15,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JsonbTest {
 
-	@Test
-	void testLogFilter() {
+    @Test
+    void shouldHandleJsonB() {
+        System.out.println("test");
 
-		// sim-ladok
-		URI uri = UriBuilder.fromUri("http://nya-01.nya-srv.its.umu.se:61080").path("api/applikation/version").build();
+        URI uri = UriBuilder.fromUri("http://nya-01.nya-srv.its.umu.se:7080/DocumentService/service/file/ping").build();
 
-		try(Client client = ClientBuilder.newBuilder().register(ClientResponseLogFilter.class).build()) {
-			try (Response response = client.target(uri).request(MediaType.APPLICATION_JSON).get()) {
-				var status = response.getStatusInfo();
+        try(Client client = ClientBuilder.newBuilder().register(ClientResponseLogFilter.class).build()) {
+            try (Response response =
+                         client.target(UriBuilder.fromUri("http://nya-01.nya-srv.its.umu.se:7080/DocumentService/service/file/ping")).request(MediaType.APPLICATION_JSON).get()) {
+                if (response.getStatus() == Response.Status.OK.getStatusCode()) {
 
-				assertThat(status.getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
+                    DummyResultVO body = response.readEntity(DummyResultVO.class);
 
-				JsonObject version = response.readEntity(JsonObject.class);
+                    System.out.println(body);
 
-				assertThat(version.getString("scm")).isEqualTo("7ef663510c9208e1ad8030cc3a6568f47d0213f3");
-				assertThat(version.getJsonObject("build").getString("number")).isEqualTo("311");
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }

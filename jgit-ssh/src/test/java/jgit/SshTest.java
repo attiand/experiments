@@ -22,7 +22,7 @@ public class SshTest {
                 .setKeyPasswordProvider(cp -> new IdentityPasswordProvider(cp) {
                     @Override
                     protected char[] getPassword(URIish uri, String message) {
-                        return "xxxx".toCharArray();
+                        return "xxx".toCharArray();
                     }
                 })
                 .build(new JGitKeyCache());
@@ -32,7 +32,7 @@ public class SshTest {
 
         try (Git clonedRepository = Git.cloneRepository()
                 .setURI("ssh://" + name + "@nya-gerrit.its.umu.se:29418/nya-deploy")
-                .setDirectory(new File("/tmp/slask/nya-baseline"))
+                .setDirectory(new File("/tmp/slask/nya-deploy"))
                 .call()) {
 
             System.out.println("ok");

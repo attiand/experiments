@@ -1,0 +1,29 @@
+
+project.version = '1.0.0'
+
+/*
+
+tasks.withType(Publish) {
+    url = project.property('url')
+    user = project.property('user')
+    password = project.property('password')
+    repository = project.property('repo')
+    version = project.version.toString()
+}
+
+tasks.register('publish', Publish) {
+    file = file('slask/test.txt')
+}
+*/
+
+tasks.register('test', MyTest) {
+    include = ['file1.txt', 'dir/**']
+}
+
+
+
+tasks.register('ant', MyAnt) {
+  
+}
+
+

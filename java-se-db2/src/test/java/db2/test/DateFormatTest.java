@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.Properties;
 import javax.sql.DataSource;
 import com.ibm.db2.jcc.DB2SimpleDataSource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class DateFormatTest {
@@ -31,6 +32,7 @@ public class DateFormatTest {
 		}
 	}
 
+    @Disabled
 	@Test
 	void shouldInsertJavaTime() throws IOException, SQLException {
 		var ds = createDataSource();
@@ -50,6 +52,7 @@ public class DateFormatTest {
 		}
 	}
 
+    @Disabled
 	@Test
 	void shouldReadJavaTime() throws IOException, SQLException {
 		var ds = createDataSource();

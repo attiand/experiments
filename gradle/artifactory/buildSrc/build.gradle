@@ -1,0 +1,13 @@
+plugins {
+    id 'groovy'
+}
+
+repositories {
+    maven {
+        url 'https://nya-artefact.nya-srv.its.umu.se/maven-remotes'
+    }
+}
+
+dependencies {
+    implementation 'org.jfrog.artifactory.client:artifactory-java-client-services:2.20.2'
+}
