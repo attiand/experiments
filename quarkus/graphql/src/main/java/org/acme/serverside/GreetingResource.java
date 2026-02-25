@@ -1,9 +1,6 @@
-package org.acme;
+package org.acme.serverside;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.graphql.*;
 
 import java.util.List;
@@ -14,7 +11,7 @@ public class GreetingResource {
     @Inject
     GreetingService service;
 
-    @Query("allPersons")
+    @Query("persons")
     @Description("Get all persons")
     public List<Person> getAllPersons() {
         return service.getAllPersons();
@@ -30,4 +27,7 @@ public class GreetingResource {
         return service.getAddressFromPerson(person);
     }
 
+    public List<Address> address(@Source List<Person> persons) {
+        return service.getAddressFromPersonList(persons);
+    }
 }

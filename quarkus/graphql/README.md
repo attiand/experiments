@@ -1,10 +1,12 @@
-# GraphQl
+# GraphQL
+
+GraphQL example in Quarkus. Uses a dynamic GraphQL client for test.
 
 ## GraphQL UI   
 
 The GraphQL UI can be accessed from http://localhost:8080/q/graphql-ui
 
-## Get Schema
+## Get the GraphQL schema
 
 ```bash
 curl http://localhost:8080/graphql/schema.graphql
@@ -12,9 +14,9 @@ curl http://localhost:8080/graphql/schema.graphql
 
 ### Get all persons
 
-```graoghql
-query allPersons {
-   allPersons {
+```graphql
+query all {
+   persons {
       firstName
    }
 }
@@ -22,8 +24,8 @@ query allPersons {
 
 ### Specific person
 
-```graoghql
-query getPerson {
+```graphql
+query no1 {
    person(personId: 1) {
       lastName
    }
@@ -32,10 +34,25 @@ query getPerson {
 
 ### Address
 
-```graoghql
-query getAddressFromPerson {
-    person(personId: 1) {
-        street
-    }
+```graphql
+query street {
+    p1: person(personId: 1) {
+       address {
+          street
+       }
+   }
 }
-``` 
+```
+
+### Address (Batch)
+
+```graphql
+query streets {
+    persons {
+       address {
+          street
+       }
+   }
+}
+```
+
