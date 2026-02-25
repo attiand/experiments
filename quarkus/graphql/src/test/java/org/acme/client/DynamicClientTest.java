@@ -1,4 +1,4 @@
-package org.acme.serverside;
+package org.acme.client;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.smallrye.graphql.client.Response;
