@@ -1,0 +1,6 @@
+echo OpenTelemetry
+
+/subsystem=opentelemetry:write-attribute(name=service-name, value="my-server"})
+/subsystem=opentelemetry:write-attribute(name=exporter-type, value="otlp")
+/subsystem=opentelemetry:write-attribute(name=sampler-type,value="off")
+
