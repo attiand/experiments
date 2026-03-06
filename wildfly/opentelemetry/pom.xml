@@ -12,26 +12,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
-
 		<version.wildfly>39.0.1.Final</version.wildfly>
-		<version.junit>5.9.3</version.junit>
-		<scm.id>jenkins</scm.id>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
-
 			<dependency>
 				<groupId>org.wildfly.bom</groupId>
 				<artifactId>wildfly-ee-with-tools</artifactId>
-				<version>${version.wildfly}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.wildfly</groupId>
-				<artifactId>wildfly-microprofile</artifactId>
 				<version>${version.wildfly}</version>
 				<type>pom</type>
 				<scope>import</scope>
@@ -46,7 +34,6 @@
 				<optional>true</optional>
 			</dependency>
 		</dependencies>
-
 	</dependencyManagement>
 
 	<dependencies>
@@ -60,8 +47,15 @@
 		</dependency>
 
 		<dependency>
+			<groupId>jakarta.inject</groupId>
+			<artifactId>jakarta.inject-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>jakarta.enterprise</groupId>
 			<artifactId>jakarta.enterprise.cdi-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -69,58 +63,12 @@
 			<artifactId>jakarta.ws.rs-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.microprofile.health</groupId>
-			<artifactId>microprofile-health-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxb-provider</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
-		</dependency>
-
-		<!-- TEST -->
-
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.23.1</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>
 		<finalName>test</finalName>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.2</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.22.2</version>
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
