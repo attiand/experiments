@@ -1,8 +1,5 @@
-/subsystem=jgroups/channel=ee:write-attribute(name=stack,value=tcp)
 /subsystem=transactions:write-attribute(name=node-identifier,value=${transactions.node-identifier:wildfly1})
 
-# add DNS_PING protocol to TCP stack
-/subsystem=jgroups/stack=tcp/protocol=dns.DNS_PING:add(add-index=1, properties={dns_query="_ping._tcp.jgroups-dns-ping.myproject.svc.cluster.local"})
 
 # connection to the remote infinispan server
 /socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=remote-infinispan-server:add(host=$${infinispan.server.host}, port=$${infinispan.server.port:11222})
