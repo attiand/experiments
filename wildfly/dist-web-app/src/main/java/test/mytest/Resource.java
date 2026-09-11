@@ -10,7 +10,7 @@ import jakarta.ws.rs.Path;
 public class Resource {
 
 	@Inject
-	MySession session;
+	MyProtoStreamSession session;
 
 	@Path("/hello")
 	@GET

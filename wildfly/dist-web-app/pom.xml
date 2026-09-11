@@ -77,6 +77,11 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.infinispan.protostream</groupId>
+			<artifactId>protostream</artifactId>
+		</dependency>
+
 		<!-- TEST -->
 
 		<dependency>
@@ -102,7 +107,6 @@
 
 	<build>
 		<pluginManagement>
-
 			<plugins>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -123,6 +127,19 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.16.0</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<annotationProcessorPath>
+							<groupId>org.infinispan.protostream</groupId>
+							<artifactId>protostream-processor</artifactId>
+						</annotationProcessorPath>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-jar-maven-plugin</artifactId>

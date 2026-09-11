@@ -13,8 +13,7 @@ batch
 
 
 # Add session management for myweb
-/subsystem=distributable-web/hotrod-session-management=myweb:add(remote-cache-container=web-sessions,granularity=SESSION)
+/subsystem=distributable-web/hotrod-session-management=myweb:add(remote-cache-container=web-sessions,granularity=SESSION, marshaller=PROTOSTREAM)
 /subsystem=distributable-web/hotrod-session-management=myweb/affinity=local:add
 /subsystem=distributable-web:write-attribute(name=default-session-management,value=myweb)
 run-batch
-
