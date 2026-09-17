@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @SessionScoped
 public class MyProtoStreamSession implements Serializable {
@@ -16,12 +17,23 @@ public class MyProtoStreamSession implements Serializable {
     @ProtoField(number = 1, type = Type.UINT32, defaultValue = "0")
     int counter = 0;
 
+    @ProtoField(number = 2)
+    LocalDateTime timestamp;
+
     public void setRequestCount(int n) {
         this.counter = n;
     }
 
     public int getRequestCount() {
         return this.counter;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     // prof that java serialization is not used
